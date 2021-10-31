@@ -1,4 +1,4 @@
-module github.com/lightstep/otel-launcher-go/pipelines
+module github.com/kant777/otel-launcher-go/pipelines
 
 go 1.16
 
