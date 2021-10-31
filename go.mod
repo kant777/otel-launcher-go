@@ -3,7 +3,7 @@ module github.com/lightstep/otel-launcher-go
 go 1.16
 
 require (
-	github.com/kant777/otel-launcher-go/pipelines v0.0.0-20210929164946-b2371957f3d7
+	github.com/kant777/otel-launcher-go/pipelines v0.0.0-20210929164946-9a8d0e1fabbb
 	github.com/sethvargo/go-envconfig v0.3.2
 	github.com/stretchr/testify v1.7.0
 	go.opentelemetry.io/collector v0.28.0
