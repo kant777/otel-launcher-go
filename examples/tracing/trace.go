@@ -19,7 +19,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/lightstep/otel-launcher-go/launcher"
+	"github.com/kant777/otel-launcher-go/launcher"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/baggage"
