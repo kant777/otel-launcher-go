@@ -32,8 +32,6 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 )
 
-const lightstepAccessTokenHeader = "lightstep-access-token"
-
 type Option func(*Config)
 
 // WithAccessToken configures the lightstep access token
@@ -195,21 +193,6 @@ type Config struct {
 	Resource                       *resource.Resource
 	logger                         Logger
 	errorHandler                   otel.ErrorHandler
-}
-
-func checkEndpointDefault(value, defValue string) error {
-	if value == "" {
-		// The endpoint is disabled.
-		return nil
-	}
-	return nil
-}
-
-func accessToken(c Config) string {
-	if c.Headers == nil {
-		return ""
-	}
-	return c.Headers[lightstepAccessTokenHeader]
 }
 
 func validateConfiguration(c Config) error {

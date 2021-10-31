@@ -30,9 +30,9 @@ ifeq ($(UNAME_S),Darwin)
 	endif
 endif
 
-GOTEST_MIN = go test -v -timeout 60s
-GOTEST = $(GOTEST_MIN) -race
-GOTEST_WITH_COVERAGE = $(GOTEST) -coverprofile=coverage.txt -covermode=atomic -coverpkg=./...
+#GOTEST_MIN = go test -v -timeout 60s
+#GOTEST = $(GOTEST_MIN) -race
+#GOTEST_WITH_COVERAGE = $(GOTEST) -coverprofile=coverage.txt -covermode=atomic -coverpkg=./...
 
 .DEFAULT_GOAL := precommit
 
@@ -56,7 +56,7 @@ $(TOOLS_DIR)/gojq: $(TOOLS_MOD_DIR)/go.mod $(TOOLS_MOD_DIR)/go.sum $(TOOLS_MOD_D
 	cd $(TOOLS_MOD_DIR) && \
 	go build -o $(TOOLS_DIR)/gojq github.com/itchyny/gojq/cmd/gojq
 
-precommit: generate build lint examples test
+precommit: generate build lint examples 
 
 .PHONY: test-with-coverage
 test-with-coverage:
@@ -90,25 +90,25 @@ build:
 	    go test -run xxxxxMatchNothingxxxxx ./... >/dev/null); \
 	done
 
-.PHONY: test
-test:
-	set -e; for dir in $(ALL_GO_MOD_DIRS); do \
-	  echo "go test ./... + race in $${dir}"; \
-	  (cd "$${dir}" && \
-	    $(GOTEST) ./...); \
-	done
+#.PHONY: test
+#test:
+#	set -e; for dir in $(ALL_GO_MOD_DIRS); do \
+#	  echo "go test ./... + race in $${dir}"; \
+#	  (cd "$${dir}" && \
+#	    $(GOTEST) ./...); \
+#	done
 
-.PHONY: test-386
+#.PHONY: test-386
 test-386:
-	if [ $(SKIP_386_TEST) = true ] ; then \
-	  echo "skipping the test for GOARCH 386 as it is not supported on the current OS"; \
-	else \
-	  set -e; for dir in $(ALL_GO_MOD_DIRS); do \
-	    echo "go test ./... GOARCH 386 in $${dir}"; \
-	    (cd "$${dir}" && \
-	      GOARCH=386 $(GOTEST_MIN) ./...); \
-	  done; \
-	fi
+#	if [ $(SKIP_386_TEST) = true ] ; then \
+#	  echo "skipping the test for GOARCH 386 as it is not supported on the current OS"; \
+#	else \
+#	  set -e; for dir in $(ALL_GO_MOD_DIRS); do \
+#	    echo "go test ./... GOARCH 386 in $${dir}"; \
+#	    (cd "$${dir}" && \
+#	      GOARCH=386 $(GOTEST_MIN) ./...); \
+#	  done; \
+#	fi
 
 .PHONY: examples
 examples:
