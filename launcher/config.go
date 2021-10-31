@@ -179,7 +179,6 @@ func (l *defaultHandler) Handle(err error) {
 	l.logger.Debugf("error: %v\n", err)
 }
 
-
 type Config struct {
 	SpanExporterEndpoint           string            `env:"OTEL_EXPORTER_OTLP_SPAN_ENDPOINT"`
 	SpanExporterEndpointInsecure   bool              `env:"OTEL_EXPORTER_OTLP_SPAN_INSECURE,default=false"`
@@ -203,6 +202,7 @@ func checkEndpointDefault(value, defValue string) error {
 		// The endpoint is disabled.
 		return nil
 	}
+	return nil
 }
 
 func accessToken(c Config) string {
