@@ -13,7 +13,7 @@ Launcher is a configuration layer that chooses default values for configuration 
 ### Getting started
 
 ```bash
-go get github.com/lightstep/otel-launcher-go/launcher
+go get github.com/kant777/otel-launcher-go/launcher
 ```
 
 ### Configure
@@ -56,19 +56,19 @@ Additional options
 
 |Config Option     |Env Variable      |Required|Default|
 |------------------|------------------|--------|-------|
-|WithServiceName            |LS_SERVICE_NAME                    |y       |-                               |
-|WithServiceVersion         |LS_SERVICE_VERSION                 |n       |unknown                         |
+|WithServiceName            |SERVICE_NAME                       |y       |-                               |
+|WithServiceVersion         |SERVICE_VERSION                    |n       |unknown                         |
 |WithHeaders                |OTEL_EXPORTER_OTLP_HEADERS         |n       |{}                              |
 |WithSpanExporterEndpoint   |OTEL_EXPORTER_OTLP_SPAN_ENDPOINT   |n       |ingest.lightstep.com:443        |
 |WithSpanExporterInsecure   |OTEL_EXPORTER_OTLP_SPAN_INSECURE   |n       |false                           |
 |WithMetricExporterEndpoint |OTEL_EXPORTER_OTLP_METRIC_ENDPOINT |n       |ingest.lightstep.com:443        |
 |WithMetricExporterInsecure |OTEL_EXPORTER_OTLP_METRIC_INSECURE |n       |false                           |
-|WithAccessToken            |LS_ACCESS_TOKEN                    |n       |-                               |
+|WithAccessToken            |ACCESS_TOKEN                       |n       |-                               |
 |WithLogLevel               |OTEL_LOG_LEVEL                     |n       |info                            |
 |WithPropagators            |OTEL_PROPAGATORS                   |n       |b3                              |
 |WithResourceAttributes     |OTEL_RESOURCE_ATTRIBUTES           |n       |-                               |
 |WithMetricReportingPeriod  |OTEL_EXPORTER_OTLP_METRIC_PERIOD   |n       |30s                             |
-|WithMetricsEnabled         |LS_METRICS_ENABLED                 |n       |True                            |
+|WithMetricsEnabled         |METRICS_ENABLED                    |n       |True                            |
 
 ### Principles behind Launcher
 
