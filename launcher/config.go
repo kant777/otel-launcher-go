@@ -23,7 +23,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/lightstep/otel-launcher-go/pipelines"
+	"github.com/kant777/otel-launcher-go/pipelines"
 	"github.com/sethvargo/go-envconfig"
 	"go.opentelemetry.io/collector/translator/conventions"
 	"go.opentelemetry.io/otel"
@@ -179,24 +179,16 @@ func (l *defaultHandler) Handle(err error) {
 	l.logger.Debugf("error: %v\n", err)
 }
 
-const (
-	// Note: these values should match the defaults used in `env` tags for Config fields.
-	// Note: the MetricExporterEndpoint currently defaults to "".  When LS is ready for OTLP metrics
-	// we'll set this to `DefaultMetricExporterEndpoint`.
-
-	DefaultSpanExporterEndpoint   = "ingest.lightstep.com:443"
-	DefaultMetricExporterEndpoint = "ingest.lightstep.com:443"
-)
 
 type Config struct {
-	SpanExporterEndpoint           string            `env:"OTEL_EXPORTER_OTLP_SPAN_ENDPOINT,default=ingest.lightstep.com:443"`
+	SpanExporterEndpoint           string            `env:"OTEL_EXPORTER_OTLP_SPAN_ENDPOINT"`
 	SpanExporterEndpointInsecure   bool              `env:"OTEL_EXPORTER_OTLP_SPAN_INSECURE,default=false"`
-	ServiceName                    string            `env:"LS_SERVICE_NAME"`
-	ServiceVersion                 string            `env:"LS_SERVICE_VERSION,default=unknown"`
+	ServiceName                    string            `env:"SERVICE_NAME"`
+	ServiceVersion                 string            `env:"SERVICE_VERSION,default=unknown"`
 	Headers                        map[string]string `env:"OTEL_EXPORTER_OTLP_HEADERS"`
-	MetricExporterEndpoint         string            `env:"OTEL_EXPORTER_OTLP_METRIC_ENDPOINT,default=ingest.lightstep.com:443"`
+	MetricExporterEndpoint         string            `env:"OTEL_EXPORTER_OTLP_METRIC_ENDPOINT"`
 	MetricExporterEndpointInsecure bool              `env:"OTEL_EXPORTER_OTLP_METRIC_INSECURE,default=false"`
-	MetricsEnabled                 bool              `env:"LS_METRICS_ENABLED,default=true"`
+	MetricsEnabled                 bool              `env:"METRICS_ENABLED,default=true"`
 	LogLevel                       string            `env:"OTEL_LOG_LEVEL,default=info"`
 	Propagators                    []string          `env:"OTEL_PROPAGATORS,default=b3"`
 	MetricReportingPeriod          string            `env:"OTEL_EXPORTER_OTLP_METRIC_PERIOD,default=30s"`
@@ -211,10 +203,6 @@ func checkEndpointDefault(value, defValue string) error {
 		// The endpoint is disabled.
 		return nil
 	}
-	if value == defValue {
-		return fmt.Errorf("invalid configuration: access token missing, must be set when reporting to %s. Set LS_ACCESS_TOKEN env var or configure WithAccessToken in code", value)
-	}
-	return nil
 }
 
 func accessToken(c Config) string {
@@ -236,24 +224,8 @@ func validateConfiguration(c Config) error {
 			}
 		}
 		if !serviceNameSet {
-			return errors.New("invalid configuration: service name missing. Set LS_SERVICE_NAME env var or configure WithServiceName in code")
+			return errors.New("invalid configuration: service name missing. Set SERVICE_NAME env var or configure WithServiceName in code")
 		}
-	}
-
-	accessTokenLen := len(accessToken(c))
-	if accessTokenLen == 0 {
-		if err := checkEndpointDefault(c.SpanExporterEndpoint, DefaultSpanExporterEndpoint); err != nil {
-			return err
-		}
-
-		if err := checkEndpointDefault(c.MetricExporterEndpoint, DefaultMetricExporterEndpoint); err != nil {
-			return err
-		}
-	}
-
-	// TODO(@tobert) will probably break on some providers but seems fine for my use cases right now
-	if accessTokenLen > 0 && (accessTokenLen != 32 && accessTokenLen != 84 && accessTokenLen != 104) {
-		return fmt.Errorf("invalid configuration: access token length incorrect. Ensure token is set correctly")
 	}
 
 	return nil
@@ -382,11 +354,6 @@ func ConfigureOpentelemetry(opts ...Option) Launcher {
 
 	if c.Headers == nil {
 		c.Headers = map[string]string{}
-	}
-
-	token := os.Getenv("LS_ACCESS_TOKEN")
-	if len(token) > 0 && len(c.Headers[lightstepAccessTokenHeader]) == 0 {
-		c.Headers[lightstepAccessTokenHeader] = token
 	}
 
 	err := validateConfiguration(c)
